@@ -1,2 +1,2 @@
-# Api_desafio
-Python, Postgres, Docker
+# Api
+Flask, Postgres, Docker and Docker compose
