@@ -48,8 +48,10 @@ def get_users():
 @app.route('/users/<int:id>', method=['GET'])
 def get_user(id):
     try:
-        user = User.query.filter_by(id=id).first()
-        return make_response(jsonify({'user': user.jason()}), 200)
+        if user:
+            user = User.query.filter_by(id=id).first()
+            return make_response(jsonify({'user': user.jason()}), 200)
+        return make_response(jsonify({'mesage': 'user not found'}), 404)     
     except e:
         return make_response(jsonify({'mesage': 'error getting user'}), 500)
 
@@ -67,4 +69,17 @@ def update_user(id):
         return make_response(jsonify({'mesage': 'user not found'}), 404)
     except e:
         return make_response(jsonify({'mesage': 'error updating user'}), 500)
-    
+
+#delete user
+@app.route('/users/<int:id>', method=['DELETE'])
+def delete_user(id):
+    try:
+        user = User.query.filter_by(id=id).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return make_response(jsonify({'mesage':'user deleted'}), 200)
+        return make_response(jsonify({'mesage': 'user not found'}), 404)
+    except e:
+        return make_response(jsonify({'mesage': 'error deleting user'}), 500)
+        
